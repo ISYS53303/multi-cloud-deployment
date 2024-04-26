@@ -12,6 +12,8 @@
 
 ## Deploy
 
+TODO: Fill in Terraform init, plan, and apply commands.
+
 ## Cloud Specific Requirements
 
 **NOTE:** These steps should **not** be used in a production environment. Only use these for testing/educational purposes. Roles/permissions should be scoped to the minimum permissions necessary, and the permissions given below are admin level.

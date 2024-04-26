@@ -1,0 +1,4 @@
+gcp/**.json
+**/.terraform*
+credentials
+**/*.tfstate*

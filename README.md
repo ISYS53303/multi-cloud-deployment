@@ -24,65 +24,65 @@ Steps below assume each CLI is authenticated before attempting to run the comman
 
 1. Create a user, replace `<username>` with the desired name.
 
-   ```bash
-   aws iam create-user --user-name <username>
-   ```
+     ```bash
+     aws iam create-user --user-name <username>
+     ```
 
 2. Create access and secret access keys, replace `<username>` with the user name from step 1. **Be sure to save the output in a safe place!! Once completed the secret access key will no longer be visible.**
 
-  ```bash
-  aws iam create-access-key --user-name <username>
-  ```
+     ```bash
+     aws iam create-access-key --user-name <username>
+     ```
 
 3. Attach policies so the user can create the necessary resources. Update `<username>` with the user name created in step 1.
 
-  ```bash
-  aws iam attach-user-policy 
-  --user-name <username> 
-  --policy-arn arn:aws:iam::aws:policy/job-function/NetworkAdministrator
-  --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
-  ```
+     ```bash
+     aws iam attach-user-policy 
+     --user-name <username> 
+     --policy-arn arn:aws:iam::aws:policy/job-function/NetworkAdministrator
+     --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
+     ```
 
 ### Azure
 
 1. Get your Subscription and Tenant IDs using the command line and update the necessary fields in `azure/provider.tf`
 
-   ```bash
-   az account list
-   ```
+     ```bash
+     az account list
+     ```
 
 2. Create an Identity for Terraform to inherit and deploy resources, and assign permissions. These commands assume a default subscription is set. If not, it can be set using `az account set --subscription "My Subscription"`, changing "My Subscription" to your subscription name.
 
-  ```bash
-  # Create identity Resource Group
-  az group create --name terraform-identity-rg --location eastus
+     ```bash
+     # Create identity Resource Group
+     az group create --name terraform-identity-rg --location eastus
 
-  # Create the identity
-  az identity create --name my-tf-identity --resource-group terraform-identity-rg
+     # Create the identity
+     az identity create --name my-tf-identity --resource-group terraform-identity-rg
 
-  # Assign permissions
-  az role assignment create \
-  --role Contributor \
-  --assignee $(az identity show --name my-tf-identity --resource-group terraform-identity-rg --query principalId -o tsv) \
-  --scope /subscriptions/<your-subscription-id>/resourceGroups/terraform-identity-rg
+     # Assign permissions
+     az role assignment create \
+     --role Contributor \
+     --assignee $(az identity show --name my-tf-identity --resource-group terraform-identity-rg --query principalId -o tsv) \
+     --scope /subscriptions/<your-subscription-id>/resourceGroups/terraform-identity-rg
 
-  # Assign the Network Contributor and Virtual Machine Contributor roles to the managed identity for the entire subscription
-  az role assignment create \
-  --assignee $(az identity show --name my-tf-identity --resource-group terraform-identity-rg --query principalId -o tsv) \
-  --role "Network Contributor" \
-  --role "Virtual Machine Contributor" \
-  --scope "/subscriptions/<subscription_id>"
-  ```
+     # Assign the Network Contributor and Virtual Machine Contributor roles to the managed identity for the entire subscription
+     az role assignment create \
+     --assignee $(az identity show --name my-tf-identity --resource-group terraform-identity-rg --query principalId -o tsv) \
+     --role "Network Contributor" \
+     --role "Virtual Machine Contributor" \
+     --scope "/subscriptions/<subscription_id>"
+     ```
 
 3. Get the client ID (application ID) and tenant ID for the managed identity. Update `client_id` in `azure/provider.tf` with the output value.
 
-  ```bash
-  # Get the client ID (application ID) and tenant ID for the managed identity
-  az identity show \
-  -n my-tf-identity \
-  --resource-group terraform-identity-rg \
-  --query "{clientId: clientId, tenantId: tenantId}" --output json
-  ```
+     ```bash
+     # Get the client ID (application ID) and tenant ID for the managed identity
+     az identity show \
+     -n my-tf-identity \
+     --resource-group terraform-identity-rg \
+     --query "{clientId: clientId, tenantId: tenantId}" --output json
+     ```
 
 ### GCP
 
@@ -91,8 +91,6 @@ Steps below assume each CLI is authenticated before attempting to run the comman
     - roles/compute.instanceAdmin
     - roles/compute.networkAdmin
     - roles/compute.firewallAdmin
-
-    **NOTE:** The permissions above are broad and not intended for use in a production environment.
 
     ```bash
     gcloud iam service-accounts create SERVICE_ACCOUNT_NAME \

@@ -14,7 +14,7 @@
 
 ## Cloud Specific Requirements
 
-**NOTE:** These steps should **not** be used in a production environment. Only use these for testing/educational purposes.
+**NOTE:** These steps should **not** be used in a production environment. Only use these for testing/educational purposes. Roles/permissions should be scoped to the minimum permissions necessary, and the permissions given below are admin level.
 
 Steps below assume each CLI is authenticated before attempting to run the commands.
 
@@ -30,6 +30,15 @@ Steps below assume each CLI is authenticated before attempting to run the comman
 
   ```bash
   aws iam create-access-key --user-name <username>
+  ```
+
+3. Attach policies so the user can create the necessary resources. Update `<username>` with the user name created in step 1.
+
+  ```bash
+  aws iam attach-user-policy 
+  --user-name <username> 
+  --policy-arn arn:aws:iam::aws:policy/job-function/NetworkAdministrator
+  --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
   ```
 
 ### Azure
